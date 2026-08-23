@@ -20,6 +20,8 @@ export type {
 	RequestHeaders,
 } from "./src/operation.js";
 
+export { DEFAULT_HEADERS } from "./src/defaults.js";
+
 export { readJson } from "./src/decode.js";
 
 export {

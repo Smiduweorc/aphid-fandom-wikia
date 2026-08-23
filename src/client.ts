@@ -1,7 +1,9 @@
 import { readJson } from "./decode.js";
+import { DEFAULT_HEADERS } from "./defaults.js";
 import { ApiError, DecodeError, HttpError, TransportError } from "./errors.js";
 import type { Operation, RequestHeaders } from "./operation.js";
 import { buildUrl } from "./url.js";
+
 
 /**
  * Sends one `Request` and resolves with the response.
@@ -30,8 +32,9 @@ export interface ApiClientOptions {
 
 	/**
 	 * Headers sent with every request, such as an API key, an `accept` or a
-	 * user agent. An operation's headers and a call's headers override these key
-	 * by key.
+	 * user agent. These override the package's own `DEFAULT_HEADERS` key by
+	 * key, and an operation's headers and a call's headers override them in
+	 * turn.
 	 */
 	readonly headers?: RequestHeaders;
 }
@@ -61,11 +64,18 @@ export class ApiClient {
 		this.#baseUrl = new URL(options.baseUrl.toString());
 		this.#transport =
 			options.transport ?? ((request): Promise<Response> => fetch(request));
-		this.#headers = new Headers(options.headers);
+		this.#headers = new Headers(DEFAULT_HEADERS);
+		for (const [key, value] of new Headers(options.headers)) {
+			this.#headers.set(key, value);
+		}
 	}
 
 	/**
 	 * Performs `operation` once and resolves with its result.
+	 *
+	 * Headers are merged in four layers, each overriding the previous key by
+	 * key: `DEFAULT_HEADERS`, the client's `headers`, the operation's
+	 * `headers`, then this call's `headers`.
 	 *
 	 * One operation is one call to the transport. A failure is reported to the
 	 * caller, which is where the decision to retry, wait or give up belongs.
