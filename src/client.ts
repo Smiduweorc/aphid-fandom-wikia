@@ -61,6 +61,10 @@ export class ApiClient {
 	readonly #headers: Headers;
 
 	constructor(options: ApiClientOptions) {
+
+		// in wikia-pull I decided the pattern for the user and just concatenated the fandom to construct the full URL, which is fine, but I realized that it would be a smarted idea to allow the user to set the full url since this wrapper is technically MOSTLY capable of working with non-fandom wrappers
+		// keyword: MOSTLY
+
 		this.#baseUrl = new URL(options.baseUrl.toString());
 		this.#transport =
 			options.transport ?? ((request): Promise<Response> => fetch(request));
