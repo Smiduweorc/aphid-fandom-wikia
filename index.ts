@@ -31,15 +31,3 @@ export {
 	TransportError,
 } from "./src/errors.js";
 
-// Example resource. Delete these two exports along with src/resources/example.ts.
-export {
-	createExample,
-	getExample,
-	listExamples,
-} from "./src/resources/example.js";
-export type {
-	Example,
-	ExampleListResponse,
-	ListExamplesQuery,
-	NewExample,
-} from "./src/resources/example.js";
