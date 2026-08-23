@@ -1,5 +1,3 @@
-import * as cheerio from "cheerio";
-
 export interface Article {
 	url: string;
 	id: string;
@@ -20,5 +18,3 @@ export interface GetArticleOptions {
 	rawContent?: boolean;
 	rawPageContent?: boolean;
 }
-
-export type CheerioAPI = ReturnType<typeof cheerio.load>;
